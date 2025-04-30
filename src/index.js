@@ -1,13 +1,28 @@
-const path = require("path");
-const { listFiles } = require("./listFiles");
+import readline from "node:readline";
+import { homedir } from "node:os";
+import { handleCommand } from "./helpers/helper.js";
 
-const dir = process.argv[2] || __dirname;
+const args = process.argv.slice(2);
+const usernameArg = args.find((arg) => arg.startsWith("--username="));
+const username = usernameArg ? usernameArg.split("=")[1] : "Anonymous";
 
-listFiles(dir)
-  .then((files) => {
-    console.log(`Files in "${dir}":`);
-    files.forEach((file) => console.log(file));
-  })
-  .catch((err) => {
-    console.error(err.message);
-  });
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  prompt: "> ",
+});
+
+let currentDir = homedir();
+console.log(`Welcome to the File Manager, ${username}!`);
+console.log(`You are currently in: ${currentDir}`);
+rl.prompt();
+
+rl.on("line", async (input) => {
+  await handleCommand(
+    input.trim(),
+    currentDir,
+    (newDir) => (currentDir = newDir)
+  );
+  console.log(`You are currently in: ${currentDir}`);
+  rl.prompt();
+});
