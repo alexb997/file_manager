@@ -1,8 +1,11 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+const rootPath = path.parse(os.homedir()).root;
+
 const up = (currentDir) => {
-  return path.dirname(currentDir);
+  const parentDir = path.dirname(currentDir);
+  return path.resolve(currentDir) === rootPath ? currentDir : parentDir;
 };
 
 const cd = async (dir, currentDir) => {
