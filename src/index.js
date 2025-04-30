@@ -3,6 +3,7 @@ import { homedir } from "node:os";
 import { handleCommand } from "./helpers/helper.js";
 
 const args = process.argv.slice(2);
+console.log("process.argv:", process.argv);
 const usernameArg = args.find((arg) => arg.startsWith("--username="));
 const username = usernameArg ? usernameArg.split("=")[1] : "Anonymous";
 

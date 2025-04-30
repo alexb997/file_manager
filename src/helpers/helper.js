@@ -1,5 +1,6 @@
 import { up, cd, ls } from "../commands/navigation.js";
-import { cat, add, mkdir, rm } from "../commands/file.js";
+import { cat, add, mkdir, rn, cp, mv, rm } from '../commands/file.js';
+import path from 'node:path';
 
 export const handleCommand = async (input, currentDir, setDir) => {
   const [command, ...args] = input.split(" ");
@@ -59,6 +60,33 @@ export const handleCommand = async (input, currentDir, setDir) => {
           break;
         }
         await rm(path.resolve(currentDir, args[0]));
+        break;
+      case "rn":
+        if (args.length < 2){
+          console.log("Invalid input");
+          break;
+        }
+        await rn(path.resolve(currentDir, args[0]), args[1]);
+        break;
+      case "cp":
+        if (args.length < 2){
+          console.log("Invalid input");
+          break;
+        }
+        await cp(
+          path.resolve(currentDir, args[0]),
+          path.resolve(currentDir, args[1])
+        );
+        break;
+      case "mv":
+        if (args.length < 2){
+          console.log("Invalid input");
+          break;
+        }
+        await mv(
+          path.resolve(currentDir, args[0]),
+          path.resolve(currentDir, args[1])
+        );
         break;
       default:
         console.log("Invalid input");
