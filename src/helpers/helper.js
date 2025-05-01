@@ -7,6 +7,7 @@ import {
   getUserName,
   getArchitecture,
 } from "../commands/os.js";
+import { calculateHash } from "../commands/hash.js";
 import path from "node:path";
 
 export const handleCommand = async (input, currentDir, setDir) => {
@@ -115,6 +116,14 @@ export const handleCommand = async (input, currentDir, setDir) => {
           default:
             console.log("Invalid input");
         }
+        break;
+      case "hash":
+        if (!args[0]) {
+          console.log("Invalid input");
+          break;
+        }
+        await calculateHash(path.resolve(currentDir, args[0]));
+        
         break;
       default:
         console.log("Invalid input");
