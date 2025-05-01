@@ -1,6 +1,13 @@
 import { up, cd, ls } from "../commands/navigation.js";
-import { cat, add, mkdir, rn, cp, mv, rm } from '../commands/file.js';
-import path from 'node:path';
+import { cat, add, mkdir, rn, cp, mv, rm } from "../commands/file.js";
+import {
+  getEOL,
+  getCPUs,
+  getHomeDir,
+  getUserName,
+  getArchitecture,
+} from "../commands/os.js";
+import path from "node:path";
 
 export const handleCommand = async (input, currentDir, setDir) => {
   const [command, ...args] = input.split(" ");
@@ -62,14 +69,14 @@ export const handleCommand = async (input, currentDir, setDir) => {
         await rm(path.resolve(currentDir, args[0]));
         break;
       case "rn":
-        if (args.length < 2){
+        if (args.length < 2) {
           console.log("Invalid input");
           break;
         }
         await rn(path.resolve(currentDir, args[0]), args[1]);
         break;
       case "cp":
-        if (args.length < 2){
+        if (args.length < 2) {
           console.log("Invalid input");
           break;
         }
@@ -79,7 +86,7 @@ export const handleCommand = async (input, currentDir, setDir) => {
         );
         break;
       case "mv":
-        if (args.length < 2){
+        if (args.length < 2) {
           console.log("Invalid input");
           break;
         }
@@ -87,6 +94,27 @@ export const handleCommand = async (input, currentDir, setDir) => {
           path.resolve(currentDir, args[0]),
           path.resolve(currentDir, args[1])
         );
+        break;
+      case "os":
+        switch (args[0]) {
+          case "--EOL":
+            getEOL();
+            break;
+          case "--cpus":
+            getCPUs();
+            break;
+          case "--homedir":
+            getHomeDir();
+            break;
+          case "--username":
+            getUserName();
+            break;
+          case "--architecture":
+            getArchitecture();
+            break;
+          default:
+            console.log("Invalid input");
+        }
         break;
       default:
         console.log("Invalid input");
