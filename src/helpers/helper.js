@@ -8,6 +8,8 @@ import {
   getArchitecture,
 } from "../commands/os.js";
 import { calculateHash } from "../commands/hash.js";
+import { compress } from "../commands/compress.js";
+import { decompress } from "../commands/decompress.js";
 import path from "node:path";
 
 export const handleCommand = async (input, currentDir, setDir) => {
@@ -123,7 +125,28 @@ export const handleCommand = async (input, currentDir, setDir) => {
           break;
         }
         await calculateHash(path.resolve(currentDir, args[0]));
-        
+
+        break;
+      case "compress":
+        if (args.length < 2) {
+          console.log("Invalid input");
+          break;
+        }
+        await compress(
+          path.resolve(currentDir, args[0]),
+          path.resolve(currentDir, args[1])
+        );
+        break;
+
+      case "decompress":
+        if (args.length < 2) {
+          console.log("Invalid input");
+          break;
+        }
+        await decompress(
+          path.resolve(currentDir, args[0]),
+          path.resolve(currentDir, args[1])
+        );
         break;
       default:
         console.log("Invalid input");
