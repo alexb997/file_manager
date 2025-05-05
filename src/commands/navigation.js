@@ -1,4 +1,6 @@
 import fs from "node:fs/promises";
+import { readdir } from "node:fs/promises";
+import { stat } from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
 
@@ -17,10 +19,23 @@ const cd = async (dir, currentDir) => {
 };
 
 const ls = async (currentDir) => {
-  const files = await fs.readdir(currentDir, { withFileTypes: true });
-  files.forEach((file) => {
-    console.log(`${file.isDirectory() ? "[DIR]" : "[FILE]"} ${file.name}`);
-  });
+  try {
+    const files = await readdir(currentDir);
+    const result = await Promise.all(
+      files.map(async (file) => {
+        const filePath = path.join(currentDir, file);
+        const fileStat = await stat(filePath);
+        return {
+          Name: file,
+          Type: fileStat.isDirectory() ? "directory" : "file"
+        };
+      })
+    );
+
+    console.table(result);
+  } catch {
+    console.log("Operation failed");
+  }
 };
 
 export { up, cd, ls };
